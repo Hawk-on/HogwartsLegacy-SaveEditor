@@ -5,6 +5,23 @@
   const isWorking = ref(false);
   const successMessage = ref('');
   const showSuccess = ref(false);
+  
+  const showDebugDialog = ref(false);
+  const debugOutput = ref('');
+
+  async function runDiagnostics() {
+      if (isWorking.value) return;
+      isWorking.value = true;
+      try {
+          debugOutput.value = await SaveGameManager.getDebugStats();
+          showDebugDialog.value = true;
+      } catch (e: any) {
+          debugOutput.value = "Error running diagnostics: " + e.toString();
+          showDebugDialog.value = true;
+      } finally {
+          isWorking.value = false;
+      }
+  }
 
   async function performUnlock(actionName: string, unlockFn: () => Promise<void>) {
     if (isWorking.value) return;
@@ -131,11 +148,40 @@
       </v-col>
     </v-row>
 
+    <!-- Debug Section -->
+    <v-divider class="my-4"></v-divider>
+    <v-expansion-panels>
+        <v-expansion-panel title="Troubleshooting" class="bg-grey-darken-3">
+            <v-expansion-panel-text>
+                <div class="d-flex align-center">
+                    <span class="text-caption mr-4">If unlocks are not appearing in-game, run diagnostics to check the save file internal state.</span>
+                    <v-btn color="error" variant="outlined" size="small" :loading="isWorking"
+                           prepend-icon="mdi-bug"
+                           @click="runDiagnostics">
+                        Run Diagnostics
+                    </v-btn>
+                </div>
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+    </v-expansion-panels>
+
     <v-snackbar v-model="showSuccess" color="success" timeout="3000">
       {{ successMessage }}
       <template v-slot:actions>
         <v-btn color="white" variant="text" @click="showSuccess = false">Close</v-btn>
       </template>
     </v-snackbar>
+
+    <v-dialog v-model="showDebugDialog" width="600">
+        <v-card title="Diagnostics Results">
+            <v-card-text>
+                <pre class="bg-black pa-4 text-caption" style="overflow: auto; max-height: 400px;">{{ debugOutput }}</pre>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" @click="showDebugDialog = false">Close</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
   </div>
 </template>

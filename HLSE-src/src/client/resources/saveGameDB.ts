@@ -36,6 +36,22 @@ export class SaveGameDB {
         return db;
     }
 
+    async getDebugStats(): Promise<string> {
+        const db = await this.#gameDB;
+        let output = "--- DEBUG STATS ---\n";
+
+        try {
+            const cats = db.exec("SELECT CategoryID, COUNT(*) as Cnt FROM CollectionDynamic GROUP BY CategoryID");
+            output += "Collections:\n" + JSON.stringify(cats[0]?.values, null, 2) + "\n\n";
+
+            const loot = db.exec("SELECT COUNT(*) FROM LootItemsDynamic WHERE ItemID LIKE 'Recipe_%'");
+            output += "Loot (Recipes): " + JSON.stringify(loot[0]?.values) + "\n";
+        } catch (e) {
+            output += "Error: " + e;
+        }
+        return output;
+    }
+
     #mapSqlResults<T>(sqlResults: initSqlJs.QueryExecResult, columnExtractList: string[] = []): T[] {
         if (!sqlResults) {
             return [];

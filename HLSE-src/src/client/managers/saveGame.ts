@@ -245,6 +245,11 @@ class SaveGameManager {
         if (!AppStateRA.saveGameData || !AppStateRA.saveGameDB) { return; }
         await AppStateRA.saveGameDB.unlockTraits();
     }
+
+    async getDebugStats(): Promise<string> {
+        if (!AppStateRA.saveGameData || !AppStateRA.saveGameDB) { return "No Save Loaded"; }
+        return await AppStateRA.saveGameDB.getDebugStats();
+    }
 }
 
 export default new SaveGameManager();

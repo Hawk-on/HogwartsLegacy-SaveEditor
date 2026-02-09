@@ -10,8 +10,9 @@ A modern, user-friendly GUI application for editing and managing Hogwarts Legacy
 
 ## ✨ Features
 
-- 📁 **Auto-detect** save files location
-- 🔍 **Auto-find** required DLL from game folder
+- 📁 **Auto-detect** save files location (with manual override)
+- ⚙️ **Configuration file** - remembers your last used folder
+- 🔍 **Auto-find** required DLL from game folder (non-blocking)
 - 🔓 **One-click** save extraction and editing
 - 🌐 **Integrated editor** - opens directly in the app
 - 💾 **Auto-save** - changes applied automatically when you click Download
@@ -33,7 +34,7 @@ A modern, user-friendly GUI application for editing and managing Hogwarts Legacy
 The app will first try to **automatically find and copy** this file from your installed games (e.g., Hogwarts Legacy).
 
 **If auto-detection fails**, the app will offer to **Download** the file automatically:
-1. Click **Yes** to download the official DLL from Modding Wiki.
+1. Click **Yes** to download the official DLL from GitHub.
    - The app verifies the file's integrity (SHA256) automatically.
 2. If download fails, you can click **No** to search your PC or select the file manually.
 
@@ -48,7 +49,7 @@ The app will first try to **automatically find and copy** this file from your in
 2. Copy `oo2core_9_win64.dll`
 3. Paste it into the same folder as `HogwartsLegacy-SaveEditor.exe`
 
-> **Note:** If you cannot find the file, you can download it separately from [Modding Wiki](https://modding.wiki/hogwartslegacy/oo2core_9_win64.dll).
+> **Note:** If you cannot find the file, you can download it separately from [GitHub releases](https://github.com/new-world-tools/go-oodle/releases/download/v0.2.3-files/oo2core_9_win64.dll).
 
 ### Python Dependencies (for running from source)
 
@@ -118,6 +119,12 @@ HogwartsLegacy-SaveEditor/
 
 ## 🔄 Changelog
 
+### v1.03
+- **FIXED:** Startup freeze on some systems caused by aggressive DLL search.
+- **ADDED:** Configuration file (`config.json`) to save your preferred save directory.
+- **ADDED:** Manual "Deep Search" option for DLLs (no longer runs automatically).
+- **IMPROVED:** Updated DLL download source to a reliable GitHub repository.
+
 ### v1.02
 - FIXED: "500 Internal Server Error" on launch for some users.
 - IMPROVED: Editor now loads files directly instead of using a local server.
@@ -142,6 +149,9 @@ Backups are saved in:
 
 ### Developer
 - **falker47** - Application development
+
+### Contributors
+- **Hawk-on** - Code refactoring and quality improvements on the html
 
 ### Special Thanks
 - **Katt** - [hlsaves.exe](https://www.nexusmods.com/hogwartslegacy/mods/99) (MIT License)
